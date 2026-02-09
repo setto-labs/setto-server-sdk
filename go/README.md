@@ -105,9 +105,12 @@ resp, err := client.CreateMerchant(ctx, &setto.CreateMerchantRequest{
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | `Email` | `string` | Yes | Merchant owner's email |
-| `Name` | `string` | Yes | Merchant display name |
-| `PayoutEVMAddress` | `string` | No | EVM chain payout address |
+| `Name` | `string` | Yes | Merchant display name (min 2, max 20 chars) |
+| `PhotoURL` | `string` | No | Merchant photo URL |
+| `PayoutEVMAddress` | `string` | Yes | EVM chain payout address |
 | `PayoutSVMAddress` | `string` | No | Solana payout address |
+| `FeeRate` | `string` | No | Fee rate |
+| `OneTimeToken` | `string` | No | OTT (for individual partner flow) |
 
 **Response:**
 
@@ -129,17 +132,21 @@ resp, err := client.GetMerchant(ctx, "merchant_id_here")
 | Field | Type | Description |
 |-------|------|-------------|
 | `MerchantID` | `string` | Merchant ID |
+| `Name` | `string` | Display name |
+| `PhotoURL` | `string` | Photo URL |
 | `PayoutEVMAddress` | `string` | EVM payout address |
 | `PayoutSVMAddress` | `string` | Solana payout address |
 
 #### UpdateMerchant
 
-Updates merchant payout addresses. Requires a One-Time Token (OTT) for security.
+Updates merchant data including wallet addresses. **Requires a One-Time Token (OTT)** with scope `UPDATE_MERCHANT` from the Setto Wallet frontend SDK.
+
+> Use this method when changing payout wallet addresses. The OTT ensures the wallet owner has authorized the change.
 
 ```go
 resp, err := client.UpdateMerchant(ctx, &setto.UpdateMerchantRequest{
     MerchantID:       "merchant_id",
-    OneTimeToken:     "ott_token",      // Required — OTT from Setto
+    OneTimeToken:     "ott_token",      // Required — OTT from frontend SDK
     PayoutEVMAddress: "0xnew...",
     PayoutSVMAddress: "NewSo1...",
 })
@@ -150,9 +157,51 @@ resp, err := client.UpdateMerchant(ctx, &setto.UpdateMerchantRequest{
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | `MerchantID` | `string` | Yes | Target merchant ID |
-| `OneTimeToken` | `string` | Yes | One-Time Token for authorization |
+| `OneTimeToken` | `string` | Yes | OTT from frontend SDK (scope: `UPDATE_MERCHANT`) |
+| `Name` | `string` | No | New display name |
+| `PhotoURL` | `string` | No | New photo URL |
 | `PayoutEVMAddress` | `string` | No | New EVM payout address |
 | `PayoutSVMAddress` | `string` | No | New Solana payout address |
+
+**Response:**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `MerchantID` | `string` | Merchant ID |
+| `Name` | `string` | Display name |
+| `PhotoURL` | `string` | Photo URL |
+| `PayoutEVMAddress` | `string` | EVM payout address |
+| `PayoutSVMAddress` | `string` | Solana payout address |
+
+#### UpdateMerchantProfile
+
+Updates merchant display info only (name, photo_url). **No OTT required** — Partner API Key authentication only.
+
+> Use this method for updating display information (e.g., when a store name or logo changes). Does not modify wallet addresses.
+
+```go
+resp, err := client.UpdateMerchantProfile(ctx, &setto.UpdateMerchantProfileRequest{
+    MerchantID: "merchant_id",
+    Name:       "New Store Name",
+    PhotoURL:   "https://example.com/logo.png",
+})
+```
+
+**Request:**
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `MerchantID` | `string` | Yes | Target merchant ID |
+| `Name` | `string` | No | New display name (min 2, max 20 chars) |
+| `PhotoURL` | `string` | No | New photo URL |
+
+**Response:**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `MerchantID` | `string` | Merchant ID |
+| `Name` | `string` | Updated display name |
+| `PhotoURL` | `string` | Updated photo URL |
 
 ---
 

@@ -59,7 +59,8 @@ const client = new SettoClient({
 |--------|-------------|
 | `createMerchant(req)` | Create a new merchant |
 | `getMerchant(merchantId)` | Get merchant details |
-| `updateMerchant(req)` | Update merchant payout addresses (requires OTT) |
+| `updateMerchant(req)` | Update merchant including wallet addresses (**requires OTT**) |
+| `updateMerchantProfile(req)` | Update display info only — name, photoUrl (**no OTT**) |
 | `getVerificationStatus(userId)` | Check user's phone verification status |
 | `exchangeAccountLinkToken(linkToken)` | Exchange link token for account info |
 | `getPaymentStatus(paymentId)` | Get real-time payment status |
@@ -67,6 +68,27 @@ const client = new SettoClient({
 ### Types
 
 All request/response types are fully defined in [`src/types.ts`](src/types.ts).
+
+### OTT (One-Time Token) Requirement
+
+- `updateMerchant()` modifies wallet addresses (payoutEvmAddress, payoutSvmAddress) and **requires a One-Time Token (OTT)** with scope `UPDATE_MERCHANT` from the Setto Wallet frontend SDK.
+- `updateMerchantProfile()` modifies display info only (name, photoUrl) and does **not** require an OTT.
+
+```typescript
+// Wallet address change — requires OTT from frontend SDK
+await client.updateMerchant({
+  merchantId: "merchant_id",
+  oneTimeToken: "ott_from_frontend",  // Required
+  payoutEvmAddress: "0xnew...",
+});
+
+// Display info change — no OTT needed
+await client.updateMerchantProfile({
+  merchantId: "merchant_id",
+  name: "New Store Name",
+  photoUrl: "https://example.com/logo.png",
+});
+```
 
 ## Project Structure
 

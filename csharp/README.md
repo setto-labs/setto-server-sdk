@@ -62,7 +62,8 @@ var client = new SettoClient(new SettoConfig
 |--------|-------------|
 | `CreateMerchantAsync(req, ct)` | Create a new merchant |
 | `GetMerchantAsync(merchantId, ct)` | Get merchant details |
-| `UpdateMerchantAsync(req, ct)` | Update merchant payout addresses (requires OTT) |
+| `UpdateMerchantAsync(req, ct)` | Update merchant including wallet addresses (**requires OTT**) |
+| `UpdateMerchantProfileAsync(req, ct)` | Update display info only — Name, PhotoUrl (**no OTT**) |
 | `GetVerificationStatusAsync(userId, ct)` | Check user's phone verification status |
 | `ExchangeAccountLinkTokenAsync(linkToken, ct)` | Exchange link token for account info |
 | `GetPaymentStatusAsync(paymentId, ct)` | Get real-time payment status |
@@ -85,6 +86,29 @@ catch (SettoNetworkException ex)
 {
     Console.WriteLine($"Network error: {ex.Message}");
 }
+```
+
+### OTT (One-Time Token) Requirement
+
+- `UpdateMerchantAsync()` modifies wallet addresses and **requires a One-Time Token (OTT)** with scope `UPDATE_MERCHANT` from the Setto Wallet frontend SDK.
+- `UpdateMerchantProfileAsync()` modifies display info only (Name, PhotoUrl) and does **not** require an OTT.
+
+```csharp
+// Wallet address change — requires OTT from frontend SDK
+await client.UpdateMerchantAsync(new UpdateMerchantRequest
+{
+    MerchantId = "merchant_id",
+    OneTimeToken = "ott_from_frontend",  // Required
+    PayoutEvmAddress = "0xnew...",
+});
+
+// Display info change — no OTT needed
+await client.UpdateMerchantProfileAsync(new UpdateMerchantProfileRequest
+{
+    MerchantId = "merchant_id",
+    Name = "New Store Name",
+    PhotoUrl = "https://example.com/logo.png",
+});
 ```
 
 ## Dependencies

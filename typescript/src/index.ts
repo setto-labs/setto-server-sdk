@@ -8,6 +8,8 @@ export type {
   GetMerchantResponse,
   UpdateMerchantRequest,
   UpdateMerchantResponse,
+  UpdateMerchantProfileRequest,
+  UpdateMerchantProfileResponse,
   VerificationStatus,
   AccountLinkInfo,
   PaymentInfo,

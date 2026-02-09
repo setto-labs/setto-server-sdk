@@ -34,6 +34,9 @@ public sealed class SettoClient : IDisposable
     public Task<UpdateMerchantResponse> UpdateMerchantAsync(UpdateMerchantRequest request, CancellationToken ct = default)
         => throw new NotImplementedException();
 
+    public Task<UpdateMerchantProfileResponse> UpdateMerchantProfileAsync(UpdateMerchantProfileRequest request, CancellationToken ct = default)
+        => throw new NotImplementedException();
+
     public Task<VerificationStatus> GetVerificationStatusAsync(string userId, CancellationToken ct = default)
         => throw new NotImplementedException();
 

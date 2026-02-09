@@ -16,7 +16,7 @@ Official server-side SDK for integrating with the [Setto Wallet Server](https://
 
 ## Features
 
-- **Merchant Management** — Create, retrieve, and update merchant accounts with payout wallet addresses
+- **Merchant Management** — Create, retrieve, and update merchant accounts with payout wallet addresses and display profiles
 - **User Verification** — Check phone verification status for partner-linked users
 - **Account Linking** — Exchange link tokens to associate Setto accounts with partner systems
 - **Payment Status** — Query real-time payment status with convenient helper methods
@@ -33,6 +33,7 @@ All SDKs communicate with the Setto Wallet Server via REST (HTTPS + JSON). Authe
 | `POST` | `/api/merchant` | Create a new merchant |
 | `GET` | `/api/merchant/{id}` | Get merchant details |
 | `PUT` | `/api/merchant/{id}` | Update merchant (requires OTT) |
+| `PATCH` | `/api/merchant/{id}/profile` | Update display info only (no OTT) |
 | `GET` | `/api/partner/user/{id}/verification` | Get user verification status |
 | `POST` | `/api/partner/exchange-link-token` | Exchange account link token |
 | `GET` | `/api/external/payment/{id}` | Get payment status |
@@ -100,6 +101,12 @@ See the [Go SDK README](go/README.md) for the full API reference.
 ## Error Handling
 
 All SDKs use structured error types. Errors from the Setto Wallet Server include a machine-readable error code and a human-readable message.
+
+### OTT (One-Time Token) Requirement
+
+`UpdateMerchant` (`PUT`) modifies wallet addresses and **requires a One-Time Token (OTT)** with scope `UPDATE_MERCHANT` from the Setto Wallet frontend SDK.
+
+`UpdateMerchantProfile` (`PATCH`) modifies display info only (name, photo_url) and does **not** require an OTT.
 
 **Error categories:**
 

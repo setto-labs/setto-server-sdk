@@ -89,7 +89,8 @@ setto::Client client(config);
 |--------|-------------|
 | `create_merchant(req)` | Create a new merchant |
 | `get_merchant(merchant_id)` | Get merchant details |
-| `update_merchant(req)` | Update merchant payout addresses (requires OTT) |
+| `update_merchant(req)` | Update merchant including wallet addresses (**requires OTT**) |
+| `update_merchant_profile(req)` | Update display info only — name, photo_url (**no OTT**) |
 | `get_verification_status(user_id)` | Check user's phone verification status |
 | `exchange_account_link_token(link_token)` | Exchange link token for account info |
 | `get_payment_status(payment_id)` | Get real-time payment status |
@@ -106,6 +107,27 @@ try {
 } catch (const setto::NetworkError& e) {
     std::cerr << "Network error: " << e.what() << std::endl;
 }
+```
+
+### OTT (One-Time Token) Requirement
+
+- `update_merchant()` modifies wallet addresses and **requires a One-Time Token (OTT)** with scope `UPDATE_MERCHANT` from the Setto Wallet frontend SDK.
+- `update_merchant_profile()` modifies display info only (name, photo_url) and does **not** require an OTT.
+
+```cpp
+// Wallet address change — requires OTT from frontend SDK
+setto::UpdateMerchantRequest update_req;
+update_req.merchant_id = "merchant_id";
+update_req.one_time_token = "ott_from_frontend";  // Required
+update_req.payout_evm_address = "0xnew...";
+auto updated = client.update_merchant(update_req);
+
+// Display info change — no OTT needed
+setto::UpdateMerchantProfileRequest profile_req;
+profile_req.merchant_id = "merchant_id";
+profile_req.name = "New Store Name";
+profile_req.photo_url = "https://example.com/logo.png";
+auto profile = client.update_merchant_profile(profile_req);
 ```
 
 ## Dependencies

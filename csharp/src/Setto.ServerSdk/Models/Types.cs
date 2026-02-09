@@ -23,6 +23,7 @@ public sealed class CreateMerchantRequest
     public required string Name { get; init; }
     public required string PayoutEvmAddress { get; init; }
     public string? Email { get; init; }
+    public string? PhotoUrl { get; init; }
     public string? PayoutSvmAddress { get; init; }
     public string? FeeRate { get; init; }
     public string? OneTimeToken { get; init; }
@@ -38,16 +39,23 @@ public sealed class GetMerchantResponse
 {
     [JsonPropertyName("merchant_id")]
     public required string MerchantId { get; init; }
+    [JsonPropertyName("name")]
+    public required string Name { get; init; }
+    [JsonPropertyName("photo_url")]
+    public required string PhotoUrl { get; init; }
     [JsonPropertyName("payout_evm_address")]
     public required string PayoutEvmAddress { get; init; }
     [JsonPropertyName("payout_svm_address")]
     public required string PayoutSvmAddress { get; init; }
 }
 
+/// <summary>Update merchant wallet addresses. Requires OTT from frontend SDK.</summary>
 public sealed class UpdateMerchantRequest
 {
     public required string MerchantId { get; init; }
-    public string? OneTimeToken { get; init; }
+    public required string OneTimeToken { get; init; }
+    public string? Name { get; init; }
+    public string? PhotoUrl { get; init; }
     public string? PayoutEvmAddress { get; init; }
     public string? PayoutSvmAddress { get; init; }
 }
@@ -56,10 +64,32 @@ public sealed class UpdateMerchantResponse
 {
     [JsonPropertyName("merchant_id")]
     public required string MerchantId { get; init; }
+    [JsonPropertyName("name")]
+    public required string Name { get; init; }
+    [JsonPropertyName("photo_url")]
+    public required string PhotoUrl { get; init; }
     [JsonPropertyName("payout_evm_address")]
     public required string PayoutEvmAddress { get; init; }
     [JsonPropertyName("payout_svm_address")]
     public required string PayoutSvmAddress { get; init; }
+}
+
+/// <summary>Update merchant display info only (name, photo_url). No OTT required.</summary>
+public sealed class UpdateMerchantProfileRequest
+{
+    public required string MerchantId { get; init; }
+    public string? Name { get; init; }
+    public string? PhotoUrl { get; init; }
+}
+
+public sealed class UpdateMerchantProfileResponse
+{
+    [JsonPropertyName("merchant_id")]
+    public required string MerchantId { get; init; }
+    [JsonPropertyName("name")]
+    public required string Name { get; init; }
+    [JsonPropertyName("photo_url")]
+    public required string PhotoUrl { get; init; }
 }
 
 // Verification types

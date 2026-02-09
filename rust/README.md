@@ -69,7 +69,8 @@ let client = Client::new(Config {
 |--------|-------------|
 | `create_merchant(&req)` | Create a new merchant |
 | `get_merchant(merchant_id)` | Get merchant details |
-| `update_merchant(&req)` | Update merchant payout addresses (requires OTT) |
+| `update_merchant(&req)` | Update merchant including wallet addresses (**requires OTT**) |
+| `update_merchant_profile(&req)` | Update display info only — name, photo_url (**no OTT**) |
 | `get_verification_status(user_id)` | Check user's phone verification status |
 | `exchange_account_link_token(link_token)` | Exchange link token for account info |
 | `get_payment_status(payment_id)` | Get real-time payment status |
@@ -84,6 +85,28 @@ match client.create_merchant(&req).await {
     Err(SettoError::Wallet(e)) => println!("API error [{}]: {}", e.code, e.message),
     Err(SettoError::Network(e)) => println!("Network error: {}", e),
 }
+```
+
+### OTT (One-Time Token) Requirement
+
+- `update_merchant()` modifies wallet addresses and **requires a One-Time Token (OTT)** with scope `UPDATE_MERCHANT` from the Setto Wallet frontend SDK.
+- `update_merchant_profile()` modifies display info only (name, photo_url) and does **not** require an OTT.
+
+```rust
+// Wallet address change — requires OTT from frontend SDK
+client.update_merchant(&UpdateMerchantRequest {
+    merchant_id: "merchant_id".into(),
+    one_time_token: "ott_from_frontend".into(),  // Required
+    payout_evm_address: Some("0xnew...".into()),
+    ..Default::default()
+}).await?;
+
+// Display info change — no OTT needed
+client.update_merchant_profile(&UpdateMerchantProfileRequest {
+    merchant_id: "merchant_id".into(),
+    name: Some("New Store Name".into()),
+    photo_url: Some("https://example.com/logo.png".into()),
+}).await?;
 ```
 
 ## Dependencies

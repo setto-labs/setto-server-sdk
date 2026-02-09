@@ -19,6 +19,7 @@ const (
 type CreateMerchantRequest struct {
 	Email            string `json:"email,omitempty"`
 	Name             string `json:"name"`
+	PhotoURL         string `json:"photo_url,omitempty"`
 	PayoutEVMAddress string `json:"payout_evm_address"`
 	PayoutSVMAddress string `json:"payout_svm_address,omitempty"`
 	FeeRate          string `json:"fee_rate,omitempty"`
@@ -33,6 +34,8 @@ type CreateMerchantResponse struct {
 // GetMerchantResponse is the response from getting merchant info.
 type GetMerchantResponse struct {
 	MerchantID       string
+	Name             string
+	PhotoURL         string
 	PayoutEVMAddress string
 	PayoutSVMAddress string
 }
@@ -41,6 +44,8 @@ type GetMerchantResponse struct {
 type UpdateMerchantRequest struct {
 	MerchantID       string `json:"-"`
 	OneTimeToken     string `json:"one_time_token,omitempty"`
+	Name             string `json:"name,omitempty"`
+	PhotoURL         string `json:"photo_url,omitempty"`
 	PayoutEVMAddress string `json:"payout_evm_address,omitempty"`
 	PayoutSVMAddress string `json:"payout_svm_address,omitempty"`
 }
@@ -48,8 +53,25 @@ type UpdateMerchantRequest struct {
 // UpdateMerchantResponse is the response from updating a merchant.
 type UpdateMerchantResponse struct {
 	MerchantID       string
+	Name             string
+	PhotoURL         string
 	PayoutEVMAddress string
 	PayoutSVMAddress string
+}
+
+// UpdateMerchantProfileRequest is the request for updating merchant display info only.
+// No OTT required — Partner API Key authentication only.
+type UpdateMerchantProfileRequest struct {
+	MerchantID string `json:"-"`
+	Name       string `json:"name,omitempty"`
+	PhotoURL   string `json:"photo_url,omitempty"`
+}
+
+// UpdateMerchantProfileResponse is the response from updating merchant profile.
+type UpdateMerchantProfileResponse struct {
+	MerchantID string
+	Name       string
+	PhotoURL   string
 }
 
 // ---- Partner / Verification types ----
@@ -104,6 +126,8 @@ type getMerchantResponse struct {
 	SystemError      string `json:"system_error"`
 	PaymentError     string `json:"payment_error"`
 	MerchantID       string `json:"merchant_id"`
+	Name             string `json:"name"`
+	PhotoURL         string `json:"photo_url"`
 	PayoutEVMAddress string `json:"payout_evm_address"`
 	PayoutSVMAddress string `json:"payout_svm_address"`
 }
@@ -113,8 +137,19 @@ type updateMerchantResponse struct {
 	PaymentError     string `json:"payment_error"`
 	ValidationError  string `json:"validation_error"`
 	MerchantID       string `json:"merchant_id"`
+	Name             string `json:"name"`
+	PhotoURL         string `json:"photo_url"`
 	PayoutEVMAddress string `json:"payout_evm_address"`
 	PayoutSVMAddress string `json:"payout_svm_address"`
+}
+
+type updateMerchantProfileResponse struct {
+	SystemError     string `json:"system_error"`
+	PaymentError    string `json:"payment_error"`
+	ValidationError string `json:"validation_error"`
+	MerchantID      string `json:"merchant_id"`
+	Name            string `json:"name"`
+	PhotoURL        string `json:"photo_url"`
 }
 
 type getVerificationStatusResponse struct {

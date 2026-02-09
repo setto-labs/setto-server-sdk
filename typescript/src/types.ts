@@ -21,6 +21,7 @@ export type PaymentStatus =
 export interface CreateMerchantRequest {
   email?: string;
   name: string;
+  photoUrl?: string;
   payoutEvmAddress: string;
   payoutSvmAddress?: string;
   feeRate?: string;
@@ -33,21 +34,41 @@ export interface CreateMerchantResponse {
 
 export interface GetMerchantResponse {
   merchantId: string;
+  name: string;
+  photoUrl: string;
   payoutEvmAddress: string;
   payoutSvmAddress: string;
 }
 
+/** Update merchant wallet addresses. Requires OTT from frontend SDK. */
 export interface UpdateMerchantRequest {
   merchantId: string;
-  oneTimeToken?: string;
+  oneTimeToken: string;
+  name?: string;
+  photoUrl?: string;
   payoutEvmAddress?: string;
   payoutSvmAddress?: string;
 }
 
 export interface UpdateMerchantResponse {
   merchantId: string;
+  name: string;
+  photoUrl: string;
   payoutEvmAddress: string;
   payoutSvmAddress: string;
+}
+
+/** Update merchant display info only (name, photoUrl). No OTT required. */
+export interface UpdateMerchantProfileRequest {
+  merchantId: string;
+  name?: string;
+  photoUrl?: string;
+}
+
+export interface UpdateMerchantProfileResponse {
+  merchantId: string;
+  name: string;
+  photoUrl: string;
 }
 
 // Verification types

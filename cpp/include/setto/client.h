@@ -21,6 +21,7 @@ public:
     CreateMerchantResponse create_merchant(const CreateMerchantRequest& req);
     GetMerchantResponse get_merchant(const std::string& merchant_id);
     UpdateMerchantResponse update_merchant(const UpdateMerchantRequest& req);
+    UpdateMerchantProfileResponse update_merchant_profile(const UpdateMerchantProfileRequest& req);
     VerificationStatus get_verification_status(const std::string& user_id);
     AccountLinkInfo exchange_account_link_token(const std::string& link_token);
     PaymentInfo get_payment_status(const std::string& payment_id);
