@@ -1,0 +1,26 @@
+{
+  "name": "@setto/server-sdk",
+  "version": "0.1.0",
+  "description": "Setto Wallet Server SDK for Node.js/TypeScript",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"no tests yet\""
+  },
+  "dependencies": {
+    "jose": "^5.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/setto-labs/setto-server-sdk.git",
+    "directory": "typescript"
+  }
+}
