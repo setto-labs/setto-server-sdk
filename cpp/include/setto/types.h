@@ -23,11 +23,9 @@ struct Config {
 struct CreateMerchantRequest {
     std::string name;
     std::string payout_evm_address;
-    std::optional<std::string> email;
     std::optional<std::string> photo_url;
     std::optional<std::string> payout_svm_address;
     std::optional<std::string> fee_rate;
-    std::optional<std::string> one_time_token;
 };
 
 struct CreateMerchantResponse {
@@ -42,10 +40,9 @@ struct GetMerchantResponse {
     std::string payout_svm_address;
 };
 
-/// Update merchant wallet addresses. Requires OTT from frontend SDK.
+/// Update merchant wallet addresses.
 struct UpdateMerchantRequest {
     std::string merchant_id;
-    std::string one_time_token;
     std::optional<std::string> name;
     std::optional<std::string> photo_url;
     std::optional<std::string> payout_evm_address;
@@ -58,19 +55,6 @@ struct UpdateMerchantResponse {
     std::string photo_url;
     std::string payout_evm_address;
     std::string payout_svm_address;
-};
-
-/// Update merchant display info only (name, photo_url). No OTT required.
-struct UpdateMerchantProfileRequest {
-    std::string merchant_id;
-    std::optional<std::string> name;
-    std::optional<std::string> photo_url;
-};
-
-struct UpdateMerchantProfileResponse {
-    std::string merchant_id;
-    std::string name;
-    std::string photo_url;
 };
 
 // Verification types

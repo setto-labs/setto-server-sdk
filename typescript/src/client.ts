@@ -5,8 +5,6 @@ import type {
   GetMerchantResponse,
   UpdateMerchantRequest,
   UpdateMerchantResponse,
-  UpdateMerchantProfileRequest,
-  UpdateMerchantProfileResponse,
   VerificationStatus,
   AccountLinkInfo,
   PaymentInfo,
@@ -44,12 +42,6 @@ export class SettoClient {
   async updateMerchant(
     _req: UpdateMerchantRequest,
   ): Promise<UpdateMerchantResponse> {
-    throw new Error("not implemented");
-  }
-
-  async updateMerchantProfile(
-    _req: UpdateMerchantProfileRequest,
-  ): Promise<UpdateMerchantProfileResponse> {
     throw new Error("not implemented");
   }
 

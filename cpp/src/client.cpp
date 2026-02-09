@@ -41,10 +41,6 @@ UpdateMerchantResponse Client::update_merchant(const UpdateMerchantRequest& /*re
     throw std::runtime_error("not implemented");
 }
 
-UpdateMerchantProfileResponse Client::update_merchant_profile(const UpdateMerchantProfileRequest& /*req*/) {
-    throw std::runtime_error("not implemented");
-}
-
 VerificationStatus Client::get_verification_status(const std::string& /*user_id*/) {
     throw std::runtime_error("not implemented");
 }

@@ -17,13 +17,11 @@ const (
 
 // CreateMerchantRequest is the request for creating a merchant.
 type CreateMerchantRequest struct {
-	Email            string `json:"email,omitempty"`
 	Name             string `json:"name"`
 	PhotoURL         string `json:"photo_url,omitempty"`
 	PayoutEVMAddress string `json:"payout_evm_address"`
 	PayoutSVMAddress string `json:"payout_svm_address,omitempty"`
 	FeeRate          string `json:"fee_rate,omitempty"`
-	OneTimeToken     string `json:"one_time_token,omitempty"`
 }
 
 // CreateMerchantResponse is the response from creating a merchant.
@@ -43,7 +41,6 @@ type GetMerchantResponse struct {
 // UpdateMerchantRequest is the request for updating a merchant.
 type UpdateMerchantRequest struct {
 	MerchantID       string `json:"-"`
-	OneTimeToken     string `json:"one_time_token,omitempty"`
 	Name             string `json:"name,omitempty"`
 	PhotoURL         string `json:"photo_url,omitempty"`
 	PayoutEVMAddress string `json:"payout_evm_address,omitempty"`
@@ -57,21 +54,6 @@ type UpdateMerchantResponse struct {
 	PhotoURL         string
 	PayoutEVMAddress string
 	PayoutSVMAddress string
-}
-
-// UpdateMerchantProfileRequest is the request for updating merchant display info only.
-// No OTT required — Partner API Key authentication only.
-type UpdateMerchantProfileRequest struct {
-	MerchantID string `json:"-"`
-	Name       string `json:"name,omitempty"`
-	PhotoURL   string `json:"photo_url,omitempty"`
-}
-
-// UpdateMerchantProfileResponse is the response from updating merchant profile.
-type UpdateMerchantProfileResponse struct {
-	MerchantID string
-	Name       string
-	PhotoURL   string
 }
 
 // ---- Partner / Verification types ----
@@ -141,15 +123,6 @@ type updateMerchantResponse struct {
 	PhotoURL         string `json:"photo_url"`
 	PayoutEVMAddress string `json:"payout_evm_address"`
 	PayoutSVMAddress string `json:"payout_svm_address"`
-}
-
-type updateMerchantProfileResponse struct {
-	SystemError     string `json:"system_error"`
-	PaymentError    string `json:"payment_error"`
-	ValidationError string `json:"validation_error"`
-	MerchantID      string `json:"merchant_id"`
-	Name            string `json:"name"`
-	PhotoURL        string `json:"photo_url"`
 }
 
 type getVerificationStatusResponse struct {

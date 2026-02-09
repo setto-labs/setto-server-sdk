@@ -57,13 +57,6 @@ impl Client {
         todo!("not implemented")
     }
 
-    pub async fn update_merchant_profile(
-        &self,
-        _req: &UpdateMerchantProfileRequest,
-    ) -> Result<UpdateMerchantProfileResponse, SettoError> {
-        todo!("not implemented")
-    }
-
     pub async fn get_verification_status(
         &self,
         _user_id: &str,

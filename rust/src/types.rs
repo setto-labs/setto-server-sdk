@@ -21,15 +21,11 @@ pub struct CreateMerchantRequest {
     pub name: String,
     pub payout_evm_address: String,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub email: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
     pub photo_url: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub payout_svm_address: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fee_rate: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub one_time_token: Option<String>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -46,11 +42,10 @@ pub struct GetMerchantResponse {
     pub payout_svm_address: String,
 }
 
-/// Update merchant wallet addresses. Requires OTT from frontend SDK.
+/// Update merchant wallet addresses.
 #[derive(Debug, Serialize)]
 pub struct UpdateMerchantRequest {
     pub merchant_id: String,
-    pub one_time_token: String,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -68,23 +63,6 @@ pub struct UpdateMerchantResponse {
     pub photo_url: String,
     pub payout_evm_address: String,
     pub payout_svm_address: String,
-}
-
-/// Update merchant display info only (name, photo_url). No OTT required.
-#[derive(Debug, Serialize)]
-pub struct UpdateMerchantProfileRequest {
-    pub merchant_id: String,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub photo_url: Option<String>,
-}
-
-#[derive(Debug, Deserialize)]
-pub struct UpdateMerchantProfileResponse {
-    pub merchant_id: String,
-    pub name: String,
-    pub photo_url: String,
 }
 
 // Verification types
