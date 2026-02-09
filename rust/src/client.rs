@@ -12,8 +12,8 @@ pub struct Client {
 
 impl Client {
     pub fn new(config: Config) -> Result<Self, SettoError> {
-        if !config.api_key.starts_with("sk_partner_") {
-            panic!("setto: API key must start with 'sk_partner_'");
+        if !config.api_key.starts_with("sk_partner.") {
+            panic!("setto: API key must start with 'sk_partner.'");
         }
 
         let base_url = config.base_url.unwrap_or_else(|| {

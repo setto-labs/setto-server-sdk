@@ -20,7 +20,7 @@ using Setto.ServerSdk.Models;
 
 var client = new SettoClient(new SettoConfig
 {
-    ApiKey = "sk_partner_your_key",
+    ApiKey = "sk_partner.your_key",
     Environment = Environment.Production,
 });
 
@@ -49,7 +49,7 @@ Console.WriteLine($"Payment status: {payment.Status}");
 ```csharp
 var client = new SettoClient(new SettoConfig
 {
-    ApiKey = "sk_partner_...",           // Required. Must start with "sk_partner_"
+    ApiKey = "sk_partner....",           // Required. Must start with "sk_partner."
     Environment = Environment.Production, // Production or Development
     BaseUrl = null,                       // Override base URL (optional)
     TimeoutMs = 30_000,                  // Request timeout in ms (optional)

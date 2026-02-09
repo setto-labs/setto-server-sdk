@@ -43,7 +43,7 @@ make
 
 int main() {
     setto::Config config;
-    config.api_key = "sk_partner_your_key";
+    config.api_key = "sk_partner.your_key";
     config.environment = setto::Environment::Production;
 
     setto::Client client(config);
@@ -75,7 +75,7 @@ int main() {
 
 ```cpp
 setto::Config config;
-config.api_key = "sk_partner_...";                       // Required
+config.api_key = "sk_partner....";                       // Required
 config.environment = setto::Environment::Production;     // Production or Development
 config.base_url = "https://custom.url";                  // Optional override
 config.timeout_ms = 30000;                               // Optional (default: 30000)

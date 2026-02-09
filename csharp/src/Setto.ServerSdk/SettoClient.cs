@@ -13,8 +13,8 @@ public sealed class SettoClient : IDisposable
 
     public SettoClient(SettoConfig config)
     {
-        if (string.IsNullOrEmpty(config.ApiKey) || !config.ApiKey.StartsWith("sk_partner_"))
-            throw new ArgumentException("setto: API key must start with 'sk_partner_'");
+        if (string.IsNullOrEmpty(config.ApiKey) || !config.ApiKey.StartsWith("sk_partner."))
+            throw new ArgumentException("setto: API key must start with 'sk_partner.'");
 
         _apiKey = config.ApiKey;
         _baseUrl = config.BaseUrl ?? (config.Environment == Environment.Production ? ProductionUrl : DevelopmentUrl);

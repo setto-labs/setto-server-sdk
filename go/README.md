@@ -27,7 +27,7 @@ import (
 
 func main() {
     client, err := setto.NewClient(setto.Config{
-        APIKey:      "sk_partner_your_key",
+        APIKey:      "sk_partner.your_key",
         Environment: setto.Production,
     })
     if err != nil {
@@ -52,7 +52,7 @@ func main() {
 
 ```go
 client, err := setto.NewClient(setto.Config{
-    APIKey:      "sk_partner_...",   // Required. Must start with "sk_partner_"
+    APIKey:      "sk_partner....",   // Required. Must start with "sk_partner."
     Environment: setto.Production,   // Production or Development
 })
 ```
@@ -62,7 +62,7 @@ client, err := setto.NewClient(setto.Config{
 ```go
 client, err := setto.NewClient(
     setto.Config{
-        APIKey:      "sk_partner_...",
+        APIKey:      "sk_partner....",
         Environment: setto.Development,
     },
     setto.WithTimeout(10 * time.Second),     // Default: 30s
@@ -78,7 +78,7 @@ client, err := setto.NewClient(
 | `setto.Production` | `https://wallet.settopay.com` | Yes |
 | `setto.Development` | `https://dev-wallet.settopay.com` | No |
 
-Production environment enforces HTTPS. API key format (`sk_partner_` prefix) is always validated.
+Production environment enforces HTTPS. API key format (`sk_partner.` prefix) is always validated.
 
 ---
 
@@ -384,7 +384,7 @@ func main() {
 
     // Initialize client
     client, err := setto.NewClient(setto.Config{
-        APIKey:      "sk_partner_your_key",
+        APIKey:      "sk_partner.your_key",
         Environment: setto.Production,
     })
     if err != nil {

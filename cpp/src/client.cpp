@@ -14,8 +14,8 @@ struct Client::Impl {
 };
 
 Client::Client(const Config& config) : impl_(std::make_unique<Impl>()) {
-    if (config.api_key.rfind("sk_partner_", 0) != 0) {
-        throw std::invalid_argument("setto: API key must start with 'sk_partner_'");
+    if (config.api_key.rfind("sk_partner.", 0) != 0) {
+        throw std::invalid_argument("setto: API key must start with 'sk_partner.'");
     }
 
     impl_->api_key = config.api_key;

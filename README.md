@@ -47,10 +47,10 @@ All SDKs communicate with the Setto Wallet Server via REST (HTTPS + JSON). Authe
 
 ## Authentication
 
-All API requests require a partner API key. Keys follow the format `sk_partner_*`.
+All API requests require a partner API key. Keys follow the format `sk_partner.*`.
 
 ```
-X-API-Key: sk_partner_your_key_here
+X-API-Key: sk_partner.your_key_here
 ```
 
 Contact [Setto](https://settopay.com) to obtain your partner API key.
@@ -70,7 +70,7 @@ import (
 
 func main() {
     client, err := setto.NewClient(setto.Config{
-        APIKey:      "sk_partner_your_key",
+        APIKey:      "sk_partner.your_key",
         Environment: setto.Production,
     })
     if err != nil {
