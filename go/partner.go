@@ -35,3 +35,19 @@ func (c *Client) ExchangeAccountLinkToken(ctx context.Context, linkToken string)
 		IsPhoneVerified: raw.IsPhoneVerified,
 	}, nil
 }
+
+// GetPayerProfile returns the payer's profile for a given payment.
+// Used by external partners to display payer info (name, photo) without exposing email.
+func (c *Client) GetPayerProfile(ctx context.Context, paymentID string) (*PayerProfile, error) {
+	var raw getPayerProfileResponse
+	if err := c.do(ctx, "GET", "/api/external/payment/"+paymentID+"/payer", nil, &raw); err != nil {
+		return nil, fmt.Errorf("get payer profile: %w", err)
+	}
+
+	return &PayerProfile{
+		SettoID:     raw.SettoID,
+		DisplayName: raw.DisplayName,
+		PhotoURL:    raw.PhotoURL,
+		ETag:        raw.ETag,
+	}, nil
+}

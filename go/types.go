@@ -71,6 +71,16 @@ type AccountLinkInfo struct {
 	IsPhoneVerified bool
 }
 
+// ---- Profile types ----
+
+// PayerProfile holds the payer's profile for a payment.
+type PayerProfile struct {
+	SettoID     string
+	DisplayName string
+	PhotoURL    string
+	ETag        string
+}
+
 // ---- Payment types ----
 
 // PaymentInfo represents the payment information.
@@ -138,4 +148,11 @@ type exchangeAccountLinkTokenResponse struct {
 	UserID          string `json:"user_id"`
 	Email           string `json:"email"`
 	IsPhoneVerified bool   `json:"is_phone_verified"`
+}
+
+type getPayerProfileResponse struct {
+	SettoID     string `json:"setto_id"`
+	DisplayName string `json:"display_name"`
+	PhotoURL    string `json:"photo_url"`
+	ETag        string `json:"etag"`
 }
