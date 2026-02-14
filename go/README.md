@@ -34,15 +34,12 @@ func main() {
         log.Fatal(err)
     }
 
-    merchant, err := client.CreateMerchant(context.Background(), &setto.CreateMerchantRequest{
-        Email:            "merchant@example.com",
-        Name:             "My Store",
-        PayoutEVMAddress: "0x1234...abcd",
-    })
+    // Check verification status
+    status, err := client.GetVerificationStatus(context.Background(), "user_id")
     if err != nil {
         log.Fatal(err)
     }
-    fmt.Printf("Merchant ID: %s\n", merchant.MerchantID)
+    fmt.Printf("Phone verified: %v\n", status.IsPhoneVerified)
 }
 ```
 
@@ -83,127 +80,6 @@ Production environment enforces HTTPS. API key format (`sk_setto.` prefix) is al
 ---
 
 ## API Reference
-
-### Merchant
-
-#### CreateMerchant
-
-Creates a new merchant account in the Setto Wallet Server. The server automatically looks up or creates a user by email, then creates a merchant linked to that user.
-
-```go
-resp, err := client.CreateMerchant(ctx, &setto.CreateMerchantRequest{
-    Email:            "merchant@example.com",       // Required
-    Name:             "My Store",                   // Required
-    PayoutEVMAddress: "0xabc...",                   // EVM payout address
-    PayoutSVMAddress: "So1ana...",                  // Solana payout address (optional)
-})
-// resp.MerchantID — the created merchant's ID
-```
-
-**Request:**
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `Email` | `string` | Yes | Merchant owner's email |
-| `Name` | `string` | Yes | Merchant display name (min 2, max 20 chars) |
-| `PhotoURL` | `string` | No | Merchant photo URL |
-| `PayoutEVMAddress` | `string` | Yes | EVM chain payout address |
-| `PayoutSVMAddress` | `string` | No | Solana payout address |
-| `FeeRate` | `string` | No | Fee rate |
-| `OneTimeToken` | `string` | No | OTT (for individual integration flow) |
-
-**Response:**
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `MerchantID` | `string` | Created merchant ID |
-
-#### GetMerchant
-
-Retrieves merchant details by ID.
-
-```go
-resp, err := client.GetMerchant(ctx, "merchant_id_here")
-// resp.MerchantID, resp.PayoutEVMAddress, resp.PayoutSVMAddress
-```
-
-**Response:**
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `MerchantID` | `string` | Merchant ID |
-| `Name` | `string` | Display name |
-| `PhotoURL` | `string` | Photo URL |
-| `PayoutEVMAddress` | `string` | EVM payout address |
-| `PayoutSVMAddress` | `string` | Solana payout address |
-
-#### UpdateMerchant
-
-Updates merchant data including wallet addresses. **Requires a One-Time Token (OTT)** with scope `UPDATE_MERCHANT` from the Setto Wallet frontend SDK.
-
-> Use this method when changing payout wallet addresses. The OTT ensures the wallet owner has authorized the change.
-
-```go
-resp, err := client.UpdateMerchant(ctx, &setto.UpdateMerchantRequest{
-    MerchantID:       "merchant_id",
-    OneTimeToken:     "ott_token",      // Required — OTT from frontend SDK
-    PayoutEVMAddress: "0xnew...",
-    PayoutSVMAddress: "NewSo1...",
-})
-```
-
-**Request:**
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `MerchantID` | `string` | Yes | Target merchant ID |
-| `OneTimeToken` | `string` | Yes | OTT from frontend SDK (scope: `UPDATE_MERCHANT`) |
-| `Name` | `string` | No | New display name |
-| `PhotoURL` | `string` | No | New photo URL |
-| `PayoutEVMAddress` | `string` | No | New EVM payout address |
-| `PayoutSVMAddress` | `string` | No | New Solana payout address |
-
-**Response:**
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `MerchantID` | `string` | Merchant ID |
-| `Name` | `string` | Display name |
-| `PhotoURL` | `string` | Photo URL |
-| `PayoutEVMAddress` | `string` | EVM payout address |
-| `PayoutSVMAddress` | `string` | Solana payout address |
-
-#### UpdateMerchantProfile
-
-Updates merchant display info only (name, photo_url). **No OTT required** — Integration API Key authentication only.
-
-> Use this method for updating display information (e.g., when a store name or logo changes). Does not modify wallet addresses.
-
-```go
-resp, err := client.UpdateMerchantProfile(ctx, &setto.UpdateMerchantProfileRequest{
-    MerchantID: "merchant_id",
-    Name:       "New Store Name",
-    PhotoURL:   "https://example.com/logo.png",
-})
-```
-
-**Request:**
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `MerchantID` | `string` | Yes | Target merchant ID |
-| `Name` | `string` | No | New display name (min 2, max 20 chars) |
-| `PhotoURL` | `string` | No | New photo URL |
-
-**Response:**
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `MerchantID` | `string` | Merchant ID |
-| `Name` | `string` | Updated display name |
-| `PhotoURL` | `string` | Updated photo URL |
-
----
 
 ### Integration
 
@@ -345,7 +221,7 @@ claims, err := verifier.VerifyIDTokenRequireEmail(ctx, idTokenString)
 Errors from the Setto Wallet Server are returned as `*WalletError`:
 
 ```go
-resp, err := client.CreateMerchant(ctx, req)
+payment, err := client.GetPaymentStatus(ctx, "payment_id")
 if err != nil {
     if walletErr, ok := setto.IsWalletError(err); ok {
         fmt.Printf("Code: %s\n", walletErr.Code)
@@ -440,19 +316,7 @@ func main() {
         log.Fatal(err)
     }
 
-    // 1. Create merchant
-    merchant, err := client.CreateMerchant(ctx, &setto.CreateMerchantRequest{
-        Email:            "store@example.com",
-        Name:             "Example Store",
-        PayoutEVMAddress: "0x742d35Cc6634C0532925a3b844Bc9e7595f2bD18",
-    })
-    if err != nil {
-        handleError(err)
-        return
-    }
-    fmt.Printf("Created merchant: %s\n", merchant.MerchantID)
-
-    // 2. Check verification status
+    // 1. Check verification status
     status, err := client.GetVerificationStatus(ctx, "user_id")
     if err != nil {
         handleError(err)
@@ -460,7 +324,7 @@ func main() {
     }
     fmt.Printf("Phone verified: %v\n", status.IsPhoneVerified)
 
-    // 3. Check payment status
+    // 2. Check payment status
     payment, err := client.GetPaymentStatus(ctx, "payment_id")
     if err != nil {
         handleError(err)
@@ -470,7 +334,7 @@ func main() {
         fmt.Printf("Payment complete! TxHash: %s\n", payment.TxHash)
     }
 
-    // 4. Verify JWT
+    // 3. Verify JWT
     verifier := client.NewVerifier()
     claims, err := verifier.VerifyIDToken(ctx, "eyJhbGci...")
     if err != nil {

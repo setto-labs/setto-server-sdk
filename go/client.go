@@ -1,7 +1,7 @@
 // Package setto provides the Setto Server SDK for integration server communication.
 //
 // This SDK communicates with Setto Wallet Server via REST API.
-// Used by integration servers to manage merchants, verify users, check payment status,
+// Used by integration servers to verify users, check payment status,
 // and verify Setto Wallet ID Tokens (JWKS/OIDC).
 //
 // Quick start:
@@ -10,8 +10,6 @@
 //	    APIKey:      "sk_setto.xxx",
 //	    Environment: setto.Production,
 //	})
-//
-//	merchant, err := client.CreateMerchant(ctx, &setto.CreateMerchantRequest{...})
 package setto
 
 import (

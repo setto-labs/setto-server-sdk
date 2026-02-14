@@ -13,49 +13,6 @@ const (
 	PaymentStatusCancelled PaymentStatus = "cancelled"
 )
 
-// ---- Merchant types ----
-
-// CreateMerchantRequest is the request for creating a merchant.
-type CreateMerchantRequest struct {
-	Name             string `json:"name"`
-	PhotoURL         string `json:"photo_url,omitempty"`
-	PayoutEVMAddress string `json:"payout_evm_address"`
-	PayoutSVMAddress string `json:"payout_svm_address,omitempty"`
-	FeeRate          string `json:"fee_rate,omitempty"`
-}
-
-// CreateMerchantResponse is the response from creating a merchant.
-type CreateMerchantResponse struct {
-	MerchantID string
-}
-
-// GetMerchantResponse is the response from getting merchant info.
-type GetMerchantResponse struct {
-	MerchantID       string
-	Name             string
-	PhotoURL         string
-	PayoutEVMAddress string
-	PayoutSVMAddress string
-}
-
-// UpdateMerchantRequest is the request for updating a merchant.
-type UpdateMerchantRequest struct {
-	MerchantID       string `json:"-"`
-	Name             string `json:"name,omitempty"`
-	PhotoURL         string `json:"photo_url,omitempty"`
-	PayoutEVMAddress string `json:"payout_evm_address,omitempty"`
-	PayoutSVMAddress string `json:"payout_svm_address,omitempty"`
-}
-
-// UpdateMerchantResponse is the response from updating a merchant.
-type UpdateMerchantResponse struct {
-	MerchantID       string
-	Name             string
-	PhotoURL         string
-	PayoutEVMAddress string
-	PayoutSVMAddress string
-}
-
 // ---- Integration / Verification types ----
 
 // VerificationStatus holds the result of a verification status query.
@@ -106,34 +63,6 @@ type Claims struct {
 }
 
 // ---- Internal wire types (gRPC-Gateway JSON format) ----
-
-type createMerchantResponse struct {
-	SystemError     string `json:"system_error"`
-	PaymentError    string `json:"payment_error"`
-	ValidationError string `json:"validation_error"`
-	MerchantID      string `json:"merchant_id"`
-}
-
-type getMerchantResponse struct {
-	SystemError      string `json:"system_error"`
-	PaymentError     string `json:"payment_error"`
-	MerchantID       string `json:"merchant_id"`
-	Name             string `json:"name"`
-	PhotoURL         string `json:"photo_url"`
-	PayoutEVMAddress string `json:"payout_evm_address"`
-	PayoutSVMAddress string `json:"payout_svm_address"`
-}
-
-type updateMerchantResponse struct {
-	SystemError      string `json:"system_error"`
-	PaymentError     string `json:"payment_error"`
-	ValidationError  string `json:"validation_error"`
-	MerchantID       string `json:"merchant_id"`
-	Name             string `json:"name"`
-	PhotoURL         string `json:"photo_url"`
-	PayoutEVMAddress string `json:"payout_evm_address"`
-	PayoutSVMAddress string `json:"payout_svm_address"`
-}
 
 type getVerificationStatusResponse struct {
 	IsPhoneVerified bool  `json:"is_phone_verified"`

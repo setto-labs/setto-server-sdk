@@ -105,17 +105,3 @@ var (
 	ErrKeyNotFound      = errors.New("setto: signing key not found")
 	ErrEmailNotVerified = errors.New("setto: email not verified")
 )
-
-// checkResponseErrors converts embedded gRPC-Gateway error fields to WalletError.
-func checkResponseErrors(sysErr, payErr, valErr string) error {
-	if sysErr != "" && sysErr != SystemOK {
-		return &WalletError{SystemError: sysErr, Code: sysErr, Message: fmt.Sprintf("system error: %s", sysErr)}
-	}
-	if payErr != "" && payErr != PaymentOK {
-		return &WalletError{PaymentError: payErr, Code: payErr, Message: fmt.Sprintf("payment error: %s", payErr)}
-	}
-	if valErr != "" && valErr != ValidationOK {
-		return &WalletError{ValidationError: valErr, Code: valErr, Message: fmt.Sprintf("validation error: %s", valErr)}
-	}
-	return nil
-}
