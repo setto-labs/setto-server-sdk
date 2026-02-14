@@ -19,7 +19,7 @@ npm install @setto/server-sdk
 import { SettoClient } from "@setto/server-sdk";
 
 const client = new SettoClient({
-  apiKey: "sk_partner.your_key",
+  apiKey: "sk_setto.your_key",
   environment: "production",
 });
 
@@ -46,7 +46,7 @@ console.log(`Payment status: ${payment.status}`);
 
 ```typescript
 const client = new SettoClient({
-  apiKey: string;         // Required. Must start with "sk_partner."
+  apiKey: string;         // Required. Must start with "sk_setto."
   environment?: string;   // "production" (default) or "development"
   baseUrl?: string;       // Override base URL
   timeout?: number;       // Request timeout in ms (default: 30000)

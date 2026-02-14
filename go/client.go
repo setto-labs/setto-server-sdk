@@ -1,13 +1,13 @@
-// Package setto provides the Setto Server SDK for partner server integration.
+// Package setto provides the Setto Server SDK for integration server communication.
 //
 // This SDK communicates with Setto Wallet Server via REST API.
-// Used by partner servers to manage merchants, verify users, check payment status,
+// Used by integration servers to manage merchants, verify users, check payment status,
 // and verify Setto Wallet ID Tokens (JWKS/OIDC).
 //
 // Quick start:
 //
 //	client, err := setto.NewClient(setto.Config{
-//	    APIKey:      "sk_partner.xxx",
+//	    APIKey:      "sk_setto.xxx",
 //	    Environment: setto.Production,
 //	})
 //
@@ -44,7 +44,7 @@ const (
 
 // Config holds configuration for creating a Client.
 type Config struct {
-	APIKey      string      // Partner API Key (sk_partner.xxx)
+	APIKey      string      // Integration API Key (sk_setto.xxx)
 	Environment Environment // Production or Development
 }
 
@@ -84,8 +84,8 @@ func NewClient(cfg Config, opts ...Option) (*Client, error) {
 	if cfg.APIKey == "" {
 		return nil, fmt.Errorf("setto: API key is required")
 	}
-	if !strings.HasPrefix(cfg.APIKey, "sk_partner.") {
-		return nil, fmt.Errorf("setto: API key must start with 'sk_partner.'")
+	if !strings.HasPrefix(cfg.APIKey, "sk_setto.") {
+		return nil, fmt.Errorf("setto: API key must start with 'sk_setto.'")
 	}
 
 	options := &clientOptions{timeout: defaultTimeout}

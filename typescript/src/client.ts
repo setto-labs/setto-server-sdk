@@ -19,8 +19,8 @@ export class SettoClient {
   private readonly timeout: number;
 
   constructor(config: SettoConfig) {
-    if (!config.apiKey?.startsWith("sk_partner.")) {
-      throw new Error("setto: API key must start with 'sk_partner.'");
+    if (!config.apiKey?.startsWith("sk_setto.")) {
+      throw new Error("setto: API key must start with 'sk_setto.'");
     }
     this.apiKey = config.apiKey;
     this.baseUrl =

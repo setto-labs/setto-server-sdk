@@ -23,7 +23,7 @@ use setto_server_sdk::{Client, Config, Environment};
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let client = Client::new(Config {
-        api_key: "sk_partner.your_key".to_string(),
+        api_key: "sk_setto.your_key".to_string(),
         environment: Environment::Production,
         base_url: None,
         timeout_ms: None,
@@ -56,7 +56,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 ```rust
 let client = Client::new(Config {
-    api_key: String,                  // Required. Must start with "sk_partner."
+    api_key: String,                  // Required. Must start with "sk_setto."
     environment: Environment,         // Production or Development
     base_url: Option<String>,         // Override base URL
     timeout_ms: Option<u64>,          // Request timeout (default: 30000)

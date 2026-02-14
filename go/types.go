@@ -56,7 +56,7 @@ type UpdateMerchantResponse struct {
 	PayoutSVMAddress string
 }
 
-// ---- Partner / Verification types ----
+// ---- Integration / Verification types ----
 
 // VerificationStatus holds the result of a verification status query.
 type VerificationStatus struct {

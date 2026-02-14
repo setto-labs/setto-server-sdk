@@ -27,7 +27,7 @@ import (
 
 func main() {
     client, err := setto.NewClient(setto.Config{
-        APIKey:      "sk_partner.your_key",
+        APIKey:      "sk_setto.your_key",
         Environment: setto.Production,
     })
     if err != nil {
@@ -52,7 +52,7 @@ func main() {
 
 ```go
 client, err := setto.NewClient(setto.Config{
-    APIKey:      "sk_partner....",   // Required. Must start with "sk_partner."
+    APIKey:      "sk_setto....",   // Required. Must start with "sk_setto."
     Environment: setto.Production,   // Production or Development
 })
 ```
@@ -62,7 +62,7 @@ client, err := setto.NewClient(setto.Config{
 ```go
 client, err := setto.NewClient(
     setto.Config{
-        APIKey:      "sk_partner....",
+        APIKey:      "sk_setto....",
         Environment: setto.Development,
     },
     setto.WithTimeout(10 * time.Second),     // Default: 30s
@@ -78,7 +78,7 @@ client, err := setto.NewClient(
 | `setto.Production` | `https://wallet.settopay.com` | Yes |
 | `setto.Development` | `https://dev-wallet.settopay.com` | No |
 
-Production environment enforces HTTPS. API key format (`sk_partner.` prefix) is always validated.
+Production environment enforces HTTPS. API key format (`sk_setto.` prefix) is always validated.
 
 ---
 
@@ -110,7 +110,7 @@ resp, err := client.CreateMerchant(ctx, &setto.CreateMerchantRequest{
 | `PayoutEVMAddress` | `string` | Yes | EVM chain payout address |
 | `PayoutSVMAddress` | `string` | No | Solana payout address |
 | `FeeRate` | `string` | No | Fee rate |
-| `OneTimeToken` | `string` | No | OTT (for individual partner flow) |
+| `OneTimeToken` | `string` | No | OTT (for individual integration flow) |
 
 **Response:**
 
@@ -175,7 +175,7 @@ resp, err := client.UpdateMerchant(ctx, &setto.UpdateMerchantRequest{
 
 #### UpdateMerchantProfile
 
-Updates merchant display info only (name, photo_url). **No OTT required** — Partner API Key authentication only.
+Updates merchant display info only (name, photo_url). **No OTT required** — Integration API Key authentication only.
 
 > Use this method for updating display information (e.g., when a store name or logo changes). Does not modify wallet addresses.
 
@@ -205,7 +205,7 @@ resp, err := client.UpdateMerchantProfile(ctx, &setto.UpdateMerchantProfileReque
 
 ---
 
-### Partner
+### Integration
 
 #### GetVerificationStatus
 
@@ -433,7 +433,7 @@ func main() {
 
     // Initialize client
     client, err := setto.NewClient(setto.Config{
-        APIKey:      "sk_partner.your_key",
+        APIKey:      "sk_setto.your_key",
         Environment: setto.Production,
     })
     if err != nil {

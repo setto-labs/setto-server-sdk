@@ -1,6 +1,6 @@
 # Setto Server SDK
 
-Official server-side SDK for integrating with the [Setto Wallet Server](https://settopay.com). This SDK enables partner servers to manage merchants, verify users, process payments, and authenticate Setto users via JWT.
+Official server-side SDK for integrating with the [Setto Wallet Server](https://settopay.com). This SDK enables integration servers to manage merchants, verify users, process payments, and authenticate Setto users via JWT.
 
 ## Language Support
 
@@ -17,8 +17,8 @@ Official server-side SDK for integrating with the [Setto Wallet Server](https://
 ## Features
 
 - **Merchant Management** — Create, retrieve, and update merchant accounts with payout wallet addresses and display profiles
-- **User Verification** — Check phone verification status for partner-linked users
-- **Account Linking** — Exchange link tokens to associate Setto accounts with partner systems
+- **User Verification** — Check phone verification status for integration-linked users
+- **Account Linking** — Exchange link tokens to associate Setto accounts with integration systems
 - **Payment Status** — Query real-time payment status with convenient helper methods
 - **JWT Verification** — Verify Setto-issued ID tokens using JWKS (RS256, auto-caching)
 
@@ -34,8 +34,8 @@ All SDKs communicate with the Setto Wallet Server via REST (HTTPS + JSON). Authe
 | `GET` | `/api/merchant/{id}` | Get merchant details |
 | `PUT` | `/api/merchant/{id}` | Update merchant (requires OTT) |
 | `PATCH` | `/api/merchant/{id}/profile` | Update display info only (no OTT) |
-| `GET` | `/api/partner/user/{id}/verification` | Get user verification status |
-| `POST` | `/api/partner/exchange-link-token` | Exchange account link token |
+| `GET` | `/api/integration/user/{id}/verification` | Get user verification status |
+| `POST` | `/api/integration/exchange-link-token` | Exchange account link token |
 | `GET` | `/api/external/payment/{id}` | Get payment status |
 | `GET` | `/.well-known/jwks.json` | JWKS endpoint (for JWT verification) |
 
@@ -48,13 +48,13 @@ All SDKs communicate with the Setto Wallet Server via REST (HTTPS + JSON). Authe
 
 ## Authentication
 
-All API requests require a partner API key. Keys follow the format `sk_partner.*`.
+All API requests require an Integration API Key. Keys follow the format `sk_setto.*`.
 
 ```
-X-API-Key: sk_partner.your_key_here
+X-API-Key: sk_setto.your_key_here
 ```
 
-Contact [Setto](https://settopay.com) to obtain your partner API key.
+Contact [Setto](https://settopay.com) to obtain your Integration API Key.
 
 ## Quick Start (Go)
 
@@ -71,7 +71,7 @@ import (
 
 func main() {
     client, err := setto.NewClient(setto.Config{
-        APIKey:      "sk_partner.your_key",
+        APIKey:      "sk_setto.your_key",
         Environment: setto.Production,
     })
     if err != nil {

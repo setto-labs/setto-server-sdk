@@ -6,7 +6,7 @@ import (
 )
 
 // CreateMerchant creates a new merchant in Setto Wallet.
-// The merchant owner is determined by the partner's authenticated identity.
+// The merchant owner is determined by the integration's authenticated identity.
 func (c *Client) CreateMerchant(ctx context.Context, req *CreateMerchantRequest) (*CreateMerchantResponse, error) {
 	var raw createMerchantResponse
 	if err := c.do(ctx, "POST", "/api/merchant", req, &raw); err != nil {
