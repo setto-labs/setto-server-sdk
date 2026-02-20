@@ -19,20 +19,22 @@ func (c *Client) GetVerificationStatus(ctx context.Context, userID string) (*Ver
 	}, nil
 }
 
-// ExchangeAccountLinkToken exchanges a one-time link token for user info.
-// The link token is atomically consumed; replay is impossible.
-func (c *Client) ExchangeAccountLinkToken(ctx context.Context, linkToken string) (*AccountLinkInfo, error) {
-	reqBody := &exchangeAccountLinkTokenRequest{LinkToken: linkToken}
+// LinkAccountDirect performs S2S direct account linking via IdP token.
+// The IdP token is verified by setto-server which matches/creates the user.
+// No OTT intermediary required.
+func (c *Client) LinkAccountDirect(ctx context.Context, idToken string) (*AccountLinkDirectResult, error) {
+	reqBody := &linkAccountDirectRequest{IDToken: idToken}
 
-	var raw exchangeAccountLinkTokenResponse
-	if err := c.do(ctx, "POST", "/api/integration/exchange-link-token", reqBody, &raw); err != nil {
-		return nil, fmt.Errorf("exchange account link token: %w", err)
+	var raw linkAccountDirectResponse
+	if err := c.do(ctx, "POST", "/api/integration/link-account-direct", reqBody, &raw); err != nil {
+		return nil, fmt.Errorf("link account direct: %w", err)
 	}
 
-	return &AccountLinkInfo{
+	return &AccountLinkDirectResult{
 		UserID:          raw.UserID,
 		Email:           raw.Email,
 		IsPhoneVerified: raw.IsPhoneVerified,
+		IsNewUser:       raw.IsNewUser,
 	}, nil
 }
 

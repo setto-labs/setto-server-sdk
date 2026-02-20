@@ -21,11 +21,12 @@ type VerificationStatus struct {
 	VerifiedAt      int64 // Unix ms, 0 if not verified
 }
 
-// AccountLinkInfo holds the result of a link token exchange.
-type AccountLinkInfo struct {
+// AccountLinkDirectResult holds the result of a S2S direct account link.
+type AccountLinkDirectResult struct {
 	UserID          string
 	Email           string
 	IsPhoneVerified bool
+	IsNewUser       bool
 }
 
 // ---- Profile types ----
@@ -69,14 +70,15 @@ type getVerificationStatusResponse struct {
 	VerifiedAt      int64 `json:"verified_at"`
 }
 
-type exchangeAccountLinkTokenRequest struct {
-	LinkToken string `json:"link_token"`
+type linkAccountDirectRequest struct {
+	IDToken string `json:"id_token"`
 }
 
-type exchangeAccountLinkTokenResponse struct {
+type linkAccountDirectResponse struct {
 	UserID          string `json:"user_id"`
 	Email           string `json:"email"`
 	IsPhoneVerified bool   `json:"is_phone_verified"`
+	IsNewUser       bool   `json:"is_new_user"`
 }
 
 type getPayerProfileResponse struct {
