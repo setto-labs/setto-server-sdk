@@ -51,3 +51,36 @@ func (c *Client) GetPayerProfile(ctx context.Context, paymentID string) (*PayerP
 		ETag:        raw.ETag,
 	}, nil
 }
+
+// InitiatePayment creates a new payment session and returns payment information.
+// The server generates a payment_id (SSoT) and the SDK/client uses it to execute the payment.
+// Auth: X-API-Key (external integration)
+func (c *Client) InitiatePayment(ctx context.Context, req *InitiatePaymentRequest) (*InitiatePaymentResponse, error) {
+	wireReq := &initiatePaymentWireRequest{
+		MerchantID:      req.MerchantID,
+		Amount:          req.Amount,
+		ChainID:         req.ChainID,
+		ContractAddress: req.ContractAddress,
+		WalletType:      req.WalletType,
+		SettoUserID:     req.SettoUserID,
+	}
+
+	var raw initiatePaymentWireResponse
+	if err := c.do(ctx, "POST", "/api/integration/payment/initiate", wireReq, &raw); err != nil {
+		return nil, fmt.Errorf("initiate payment: %w", err)
+	}
+
+	return &InitiatePaymentResponse{
+		PaymentID:       raw.PaymentID,
+		MerchantID:      raw.MerchantID,
+		PoolAddress:     raw.PoolAddress,
+		Amount:          raw.Amount,
+		ChainID:         raw.ChainID,
+		ContractAddress: raw.ContractAddress,
+		ExpiresAt:       raw.ExpiresAt,
+		CreatedAt:       raw.CreatedAt,
+		FeeAmount:       raw.FeeAmount,
+		MerchantAddress: raw.MerchantAddress,
+		Deadline:        raw.Deadline,
+	}, nil
+}

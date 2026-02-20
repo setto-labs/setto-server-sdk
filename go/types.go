@@ -85,3 +85,53 @@ type getPayerProfileResponse struct {
 	PhotoURL    string `json:"photo_url"`
 	ETag        string `json:"etag"`
 }
+
+// ---- InitiatePayment types ----
+
+// InitiatePaymentRequest is the request for initiating a payment.
+type InitiatePaymentRequest struct {
+	MerchantID      string `json:"merchant_id"`
+	Amount          string `json:"amount"`
+	ChainID         int32  `json:"chain_id"`
+	ContractAddress string `json:"contract_address"`
+	WalletType      string `json:"wallet_type"`
+	SettoUserID     string `json:"setto_user_id"`
+}
+
+// InitiatePaymentResponse is the response from payment initiation.
+type InitiatePaymentResponse struct {
+	PaymentID       string `json:"payment_id"`
+	MerchantID      string `json:"merchant_id"`
+	PoolAddress     string `json:"pool_address"`
+	Amount          string `json:"amount"`
+	ChainID         int32  `json:"chain_id"`
+	ContractAddress string `json:"contract_address"`
+	ExpiresAt       int64  `json:"expires_at"`
+	CreatedAt       int64  `json:"created_at"`
+	FeeAmount       string `json:"fee_amount"`
+	MerchantAddress string `json:"merchant_address,omitempty"`
+	Deadline        int64  `json:"deadline,omitempty"`
+}
+
+type initiatePaymentWireRequest struct {
+	MerchantID      string `json:"merchant_id"`
+	Amount          string `json:"amount"`
+	ChainID         int32  `json:"chain_id"`
+	ContractAddress string `json:"contract_address"`
+	WalletType      string `json:"wallet_type"`
+	SettoUserID     string `json:"setto_user_id"`
+}
+
+type initiatePaymentWireResponse struct {
+	PaymentID       string `json:"payment_id"`
+	MerchantID      string `json:"merchant_id"`
+	PoolAddress     string `json:"pool_address"`
+	Amount          string `json:"amount"`
+	ChainID         int32  `json:"chain_id"`
+	ContractAddress string `json:"contract_address"`
+	ExpiresAt       int64  `json:"expires_at"`
+	CreatedAt       int64  `json:"created_at"`
+	FeeAmount       string `json:"fee_amount"`
+	MerchantAddress string `json:"merchant_address,omitempty"`
+	Deadline        int64  `json:"deadline,omitempty"`
+}
