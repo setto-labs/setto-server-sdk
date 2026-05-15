@@ -83,6 +83,6 @@ func (c *Client) InitiatePayment(ctx context.Context, req *InitiatePaymentReques
 		CreatedAt:       raw.CreatedAt,
 		FeeAmount:       raw.FeeAmount,
 		MerchantAddress: raw.MerchantAddress,
-		Deadline:        raw.Deadline,
+		Decimals:        raw.Decimals,
 	}, nil
 }

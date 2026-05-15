@@ -82,25 +82,100 @@ pub struct AccountLinkInfo {
 
 // Payment types
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize)]
-#[serde(rename_all = "snake_case")]
+/// Payment status values matching proto PaymentStatus enum (gRPC-Gateway UPPER_SNAKE_CASE).
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum PaymentStatus {
+    #[serde(rename = "PAYMENT_STATUS_UNSPECIFIED")]
+    Unspecified,
+    #[serde(rename = "PAYMENT_STATUS_PENDING")]
     Pending,
+    #[serde(rename = "PAYMENT_STATUS_PROCESSING")]
+    Processing,
+    #[serde(rename = "PAYMENT_STATUS_SUBMITTED")]
     Submitted,
+    #[serde(rename = "PAYMENT_STATUS_INCLUDED")]
     Included,
+    #[serde(rename = "PAYMENT_STATUS_CONFIRMED")]
+    Confirmed,
+    #[serde(rename = "PAYMENT_STATUS_FINALIZED")]
+    Finalized,
+    #[serde(rename = "PAYMENT_STATUS_FAILED")]
     Failed,
+    #[serde(rename = "PAYMENT_STATUS_REFUND_PENDING")]
+    RefundPending,
+    #[serde(rename = "PAYMENT_STATUS_CANCELLED")]
     Cancelled,
 }
 
+/// Wallet type values matching proto WalletType enum (gRPC-Gateway UPPER_SNAKE_CASE).
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum WalletType {
+    #[serde(rename = "WALLET_TYPE_UNSPECIFIED")]
+    Unspecified,
+    #[serde(rename = "WALLET_TYPE_SETTO")]
+    Setto,
+    #[serde(rename = "WALLET_TYPE_METAMASK")]
+    Metamask,
+    #[serde(rename = "WALLET_TYPE_OKX")]
+    OKX,
+    #[serde(rename = "WALLET_TYPE_COINBASE")]
+    Coinbase,
+    #[serde(rename = "WALLET_TYPE_PHANTOM")]
+    Phantom,
+}
+
+/// Request for initiating a payment.
+#[derive(Debug, Serialize)]
+pub struct InitiatePaymentRequest {
+    pub merchant_id: String,
+    pub amount: String,
+    pub chain_id: i32,
+    pub contract_address: String,
+    pub wallet_type: WalletType,
+    pub setto_user_id: String,
+}
+
+/// Response from payment initiation.
+/// Fields match proto InitiatePaymentResponse (gRPC-Gateway snake_case JSON).
+#[derive(Debug, Deserialize)]
+pub struct InitiatePaymentResponse {
+    pub payment_id: String,
+    pub merchant_id: String,
+    pub pool_address: String,
+    pub amount: String,
+    pub chain_id: i32,
+    pub contract_address: String,
+    pub expires_at: i64,
+    pub created_at: i64,
+    pub fee_amount: String,
+    #[serde(default)]
+    pub merchant_address: Option<String>,
+    #[serde(default)]
+    pub decimals: Option<i32>,
+}
+
+/// Payment information matching proto GetExternalPaymentStatusResponse (gRPC-Gateway snake_case JSON).
 #[derive(Debug, Deserialize)]
 pub struct PaymentInfo {
     pub payment_id: String,
     pub status: PaymentStatus,
+    #[serde(default)]
     pub tx_hash: Option<String>,
     pub amount: String,
     pub currency: String,
     pub created_at: i64,
+    #[serde(default)]
     pub completed_at: Option<i64>,
+    #[serde(default)]
+    pub decimals: Option<u32>,
+    #[serde(default)]
+    pub sender_address: Option<String>,
+    #[serde(default)]
+    pub pool_address: Option<String>,
+    #[serde(default)]
+    pub chain_id: Option<i32>,
+    #[serde(default)]
+    pub contract_address: Option<String>,
 }
 
 impl PaymentInfo {
@@ -113,7 +188,10 @@ impl PaymentInfo {
     }
 
     pub fn is_pending(&self) -> bool {
-        matches!(self.status, PaymentStatus::Pending | PaymentStatus::Submitted)
+        matches!(
+            self.status,
+            PaymentStatus::Pending | PaymentStatus::Processing | PaymentStatus::Submitted
+        )
     }
 }
 

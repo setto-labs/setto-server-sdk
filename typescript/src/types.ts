@@ -10,12 +10,27 @@ export interface SettoConfig {
   baseUrl?: string;
 }
 
+/** Payment status values matching proto PaymentStatus enum (gRPC-Gateway UPPER_SNAKE_CASE). */
 export type PaymentStatus =
-  | "pending"
-  | "submitted"
-  | "included"
-  | "failed"
-  | "cancelled";
+  | "PAYMENT_STATUS_UNSPECIFIED"
+  | "PAYMENT_STATUS_PENDING"
+  | "PAYMENT_STATUS_PROCESSING"
+  | "PAYMENT_STATUS_SUBMITTED"
+  | "PAYMENT_STATUS_INCLUDED"
+  | "PAYMENT_STATUS_CONFIRMED"
+  | "PAYMENT_STATUS_FINALIZED"
+  | "PAYMENT_STATUS_FAILED"
+  | "PAYMENT_STATUS_REFUND_PENDING"
+  | "PAYMENT_STATUS_CANCELLED";
+
+/** Wallet type values matching proto WalletType enum (gRPC-Gateway UPPER_SNAKE_CASE). */
+export type WalletType =
+  | "WALLET_TYPE_UNSPECIFIED"
+  | "WALLET_TYPE_SETTO"
+  | "WALLET_TYPE_METAMASK"
+  | "WALLET_TYPE_OKX"
+  | "WALLET_TYPE_COINBASE"
+  | "WALLET_TYPE_PHANTOM";
 
 // Merchant types
 export interface CreateMerchantRequest {
@@ -67,15 +82,20 @@ export interface AccountLinkInfo {
   isPhoneVerified: boolean;
 }
 
-// Payment types
+// Payment types (fields match proto GetExternalPaymentStatusResponse, gRPC-Gateway snake_case JSON)
 export interface PaymentInfo {
-  paymentId: string;
+  payment_id: string;
   status: PaymentStatus;
-  txHash?: string;
+  tx_hash?: string;
   amount: string;
   currency: string;
-  createdAt: number;
-  completedAt?: number;
+  created_at: number;
+  completed_at?: number;
+  decimals?: number;
+  sender_address?: string;
+  pool_address?: string;
+  chain_id?: number;
+  contract_address?: string;
 }
 
 // JWT Claims

@@ -3,14 +3,33 @@ package setto
 import "time"
 
 // PaymentStatus represents the status of a payment.
+// Values match proto enum PaymentStatus JSON serialization (gRPC-Gateway UPPER_SNAKE_CASE).
 type PaymentStatus string
 
 const (
-	PaymentStatusPending   PaymentStatus = "pending"
-	PaymentStatusSubmitted PaymentStatus = "submitted"
-	PaymentStatusIncluded  PaymentStatus = "included"
-	PaymentStatusFailed    PaymentStatus = "failed"
-	PaymentStatusCancelled PaymentStatus = "cancelled"
+	PaymentStatusUnspecified  PaymentStatus = "PAYMENT_STATUS_UNSPECIFIED"
+	PaymentStatusPending      PaymentStatus = "PAYMENT_STATUS_PENDING"
+	PaymentStatusProcessing   PaymentStatus = "PAYMENT_STATUS_PROCESSING"
+	PaymentStatusSubmitted    PaymentStatus = "PAYMENT_STATUS_SUBMITTED"
+	PaymentStatusIncluded     PaymentStatus = "PAYMENT_STATUS_INCLUDED"
+	PaymentStatusConfirmed    PaymentStatus = "PAYMENT_STATUS_CONFIRMED"
+	PaymentStatusFinalized    PaymentStatus = "PAYMENT_STATUS_FINALIZED"
+	PaymentStatusFailed       PaymentStatus = "PAYMENT_STATUS_FAILED"
+	PaymentStatusRefundPending PaymentStatus = "PAYMENT_STATUS_REFUND_PENDING"
+	PaymentStatusCancelled    PaymentStatus = "PAYMENT_STATUS_CANCELLED"
+)
+
+// WalletType represents the type of wallet used for payment.
+// Values match proto enum WalletType JSON serialization (gRPC-Gateway UPPER_SNAKE_CASE).
+type WalletType string
+
+const (
+	WalletTypeUnspecified WalletType = "WALLET_TYPE_UNSPECIFIED"
+	WalletTypeSetto       WalletType = "WALLET_TYPE_SETTO"
+	WalletTypeMetamask    WalletType = "WALLET_TYPE_METAMASK"
+	WalletTypeOKX         WalletType = "WALLET_TYPE_OKX"
+	WalletTypeCoinbase    WalletType = "WALLET_TYPE_COINBASE"
+	WalletTypePhantom     WalletType = "WALLET_TYPE_PHANTOM"
 )
 
 // ---- Integration / Verification types ----
@@ -42,14 +61,20 @@ type PayerProfile struct {
 // ---- Payment types ----
 
 // PaymentInfo represents the payment information.
+// Fields match proto GetExternalPaymentStatusResponse (gRPC-Gateway snake_case JSON).
 type PaymentInfo struct {
-	PaymentID   string        `json:"paymentId"`
-	Status      PaymentStatus `json:"status"`
-	TxHash      string        `json:"txHash,omitempty"`
-	Amount      string        `json:"amount"`
-	Currency    string        `json:"currency"`
-	CreatedAt   int64         `json:"createdAt"`
-	CompletedAt int64         `json:"completedAt,omitempty"`
+	PaymentID       string        `json:"payment_id"`
+	Status          PaymentStatus `json:"status"`
+	TxHash          string        `json:"tx_hash,omitempty"`
+	Amount          string        `json:"amount"`
+	Currency        string        `json:"currency"`
+	CreatedAt       int64         `json:"created_at"`
+	CompletedAt     int64         `json:"completed_at,omitempty"`
+	Decimals        uint32        `json:"decimals,omitempty"`
+	SenderAddress   string        `json:"sender_address,omitempty"`
+	PoolAddress     string        `json:"pool_address,omitempty"`
+	ChainID         int32         `json:"chain_id,omitempty"`
+	ContractAddress string        `json:"contract_address,omitempty"`
 }
 
 // ---- JWT Claims ----
@@ -92,15 +117,16 @@ type getPayerProfileResponse struct {
 
 // InitiatePaymentRequest is the request for initiating a payment.
 type InitiatePaymentRequest struct {
-	MerchantID      string `json:"merchant_id"`
-	Amount          string `json:"amount"`
-	ChainID         int32  `json:"chain_id"`
-	ContractAddress string `json:"contract_address"`
-	WalletType      string `json:"wallet_type"`
-	SettoUserID     string `json:"setto_user_id"`
+	MerchantID      string     `json:"merchant_id"`
+	Amount          string     `json:"amount"`
+	ChainID         int32      `json:"chain_id"`
+	ContractAddress string     `json:"contract_address"`
+	WalletType      WalletType `json:"wallet_type"`
+	SettoUserID     string     `json:"setto_user_id"`
 }
 
 // InitiatePaymentResponse is the response from payment initiation.
+// Fields match proto InitiatePaymentResponse (gRPC-Gateway snake_case JSON).
 type InitiatePaymentResponse struct {
 	PaymentID       string `json:"payment_id"`
 	MerchantID      string `json:"merchant_id"`
@@ -112,16 +138,16 @@ type InitiatePaymentResponse struct {
 	CreatedAt       int64  `json:"created_at"`
 	FeeAmount       string `json:"fee_amount"`
 	MerchantAddress string `json:"merchant_address,omitempty"`
-	Deadline        int64  `json:"deadline,omitempty"`
+	Decimals        int32  `json:"decimals,omitempty"`
 }
 
 type initiatePaymentWireRequest struct {
-	MerchantID      string `json:"merchant_id"`
-	Amount          string `json:"amount"`
-	ChainID         int32  `json:"chain_id"`
-	ContractAddress string `json:"contract_address"`
-	WalletType      string `json:"wallet_type"`
-	SettoUserID     string `json:"setto_user_id"`
+	MerchantID      string     `json:"merchant_id"`
+	Amount          string     `json:"amount"`
+	ChainID         int32      `json:"chain_id"`
+	ContractAddress string     `json:"contract_address"`
+	WalletType      WalletType `json:"wallet_type"`
+	SettoUserID     string     `json:"setto_user_id"`
 }
 
 type initiatePaymentWireResponse struct {
@@ -135,5 +161,5 @@ type initiatePaymentWireResponse struct {
 	CreatedAt       int64  `json:"created_at"`
 	FeeAmount       string `json:"fee_amount"`
 	MerchantAddress string `json:"merchant_address,omitempty"`
-	Deadline        int64  `json:"deadline,omitempty"`
+	Decimals        int32  `json:"decimals,omitempty"`
 }

@@ -24,7 +24,9 @@ func (p *PaymentInfo) IsPaymentFailed() bool {
 	return p.Status == PaymentStatusFailed || p.Status == PaymentStatusCancelled
 }
 
-// IsPaymentPending returns true if the payment is still pending.
+// IsPaymentPending returns true if the payment is still in progress.
 func (p *PaymentInfo) IsPaymentPending() bool {
-	return p.Status == PaymentStatusPending || p.Status == PaymentStatusSubmitted
+	return p.Status == PaymentStatusPending ||
+		p.Status == PaymentStatusProcessing ||
+		p.Status == PaymentStatusSubmitted
 }

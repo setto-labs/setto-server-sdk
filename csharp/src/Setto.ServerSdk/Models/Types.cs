@@ -93,16 +93,79 @@ public sealed class AccountLinkInfo
 
 // Payment types
 
-[JsonConverter(typeof(JsonStringEnumConverter))]
+/// <summary>Payment status values matching proto PaymentStatus enum (gRPC-Gateway UPPER_SNAKE_CASE).</summary>
+[JsonConverter(typeof(JsonStringEnumConverter<PaymentStatus>))]
 public enum PaymentStatus
 {
-    [JsonPropertyName("pending")] Pending,
-    [JsonPropertyName("submitted")] Submitted,
-    [JsonPropertyName("included")] Included,
-    [JsonPropertyName("failed")] Failed,
-    [JsonPropertyName("cancelled")] Cancelled,
+    [JsonPropertyName("PAYMENT_STATUS_UNSPECIFIED")] Unspecified,
+    [JsonPropertyName("PAYMENT_STATUS_PENDING")] Pending,
+    [JsonPropertyName("PAYMENT_STATUS_PROCESSING")] Processing,
+    [JsonPropertyName("PAYMENT_STATUS_SUBMITTED")] Submitted,
+    [JsonPropertyName("PAYMENT_STATUS_INCLUDED")] Included,
+    [JsonPropertyName("PAYMENT_STATUS_CONFIRMED")] Confirmed,
+    [JsonPropertyName("PAYMENT_STATUS_FINALIZED")] Finalized,
+    [JsonPropertyName("PAYMENT_STATUS_FAILED")] Failed,
+    [JsonPropertyName("PAYMENT_STATUS_REFUND_PENDING")] RefundPending,
+    [JsonPropertyName("PAYMENT_STATUS_CANCELLED")] Cancelled,
 }
 
+/// <summary>Wallet type values matching proto WalletType enum (gRPC-Gateway UPPER_SNAKE_CASE).</summary>
+[JsonConverter(typeof(JsonStringEnumConverter<WalletType>))]
+public enum WalletType
+{
+    [JsonPropertyName("WALLET_TYPE_UNSPECIFIED")] Unspecified,
+    [JsonPropertyName("WALLET_TYPE_SETTO")] Setto,
+    [JsonPropertyName("WALLET_TYPE_METAMASK")] Metamask,
+    [JsonPropertyName("WALLET_TYPE_OKX")] OKX,
+    [JsonPropertyName("WALLET_TYPE_COINBASE")] Coinbase,
+    [JsonPropertyName("WALLET_TYPE_PHANTOM")] Phantom,
+}
+
+/// <summary>Request for initiating a payment.</summary>
+public sealed class InitiatePaymentRequest
+{
+    [JsonPropertyName("merchant_id")]
+    public required string MerchantId { get; init; }
+    [JsonPropertyName("amount")]
+    public required string Amount { get; init; }
+    [JsonPropertyName("chain_id")]
+    public required int ChainId { get; init; }
+    [JsonPropertyName("contract_address")]
+    public required string ContractAddress { get; init; }
+    [JsonPropertyName("wallet_type")]
+    public required WalletType WalletType { get; init; }
+    [JsonPropertyName("setto_user_id")]
+    public required string SettoUserId { get; init; }
+}
+
+/// <summary>Response from payment initiation. Fields match proto InitiatePaymentResponse (gRPC-Gateway snake_case JSON).</summary>
+public sealed class InitiatePaymentResponse
+{
+    [JsonPropertyName("payment_id")]
+    public required string PaymentId { get; init; }
+    [JsonPropertyName("merchant_id")]
+    public required string MerchantId { get; init; }
+    [JsonPropertyName("pool_address")]
+    public required string PoolAddress { get; init; }
+    [JsonPropertyName("amount")]
+    public required string Amount { get; init; }
+    [JsonPropertyName("chain_id")]
+    public required int ChainId { get; init; }
+    [JsonPropertyName("contract_address")]
+    public required string ContractAddress { get; init; }
+    [JsonPropertyName("expires_at")]
+    public required long ExpiresAt { get; init; }
+    [JsonPropertyName("created_at")]
+    public required long CreatedAt { get; init; }
+    [JsonPropertyName("fee_amount")]
+    public required string FeeAmount { get; init; }
+    [JsonPropertyName("merchant_address")]
+    public string? MerchantAddress { get; init; }
+    [JsonPropertyName("decimals")]
+    public int? Decimals { get; init; }
+}
+
+/// <summary>Payment information matching proto GetExternalPaymentStatusResponse (gRPC-Gateway snake_case JSON).</summary>
 public sealed class PaymentInfo
 {
     [JsonPropertyName("payment_id")]
@@ -119,10 +182,20 @@ public sealed class PaymentInfo
     public required long CreatedAt { get; init; }
     [JsonPropertyName("completed_at")]
     public long? CompletedAt { get; init; }
+    [JsonPropertyName("decimals")]
+    public uint? Decimals { get; init; }
+    [JsonPropertyName("sender_address")]
+    public string? SenderAddress { get; init; }
+    [JsonPropertyName("pool_address")]
+    public string? PoolAddress { get; init; }
+    [JsonPropertyName("chain_id")]
+    public int? ChainId { get; init; }
+    [JsonPropertyName("contract_address")]
+    public string? ContractAddress { get; init; }
 
     public bool IsComplete => Status == PaymentStatus.Included;
     public bool IsFailed => Status is PaymentStatus.Failed or PaymentStatus.Cancelled;
-    public bool IsPending => Status is PaymentStatus.Pending or PaymentStatus.Submitted;
+    public bool IsPending => Status is PaymentStatus.Pending or PaymentStatus.Processing or PaymentStatus.Submitted;
 }
 
 // JWT Claims

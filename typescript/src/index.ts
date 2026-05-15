@@ -12,5 +12,6 @@ export type {
   AccountLinkInfo,
   PaymentInfo,
   PaymentStatus,
+  WalletType,
   Claims,
 } from "./types.js";
