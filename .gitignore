@@ -1,0 +1,22 @@
+# TypeScript / Node
+node_modules/
+dist/
+*.tsbuildinfo
+
+# Rust
+target/
+
+# C++
+build/
+*.o
+*.a
+
+# C#
+bin/
+obj/
+
+# OS / Editor
+.DS_Store
+*.swp
+.idea/
+.vscode/
